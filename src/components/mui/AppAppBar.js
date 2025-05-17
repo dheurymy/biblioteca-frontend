@@ -49,6 +49,7 @@ export default function AppAppBar() {
         bgcolor: 'transparent',
         backgroundImage: 'none',
         mt: 'calc(var(--template-frame-height, 0px) + 28px)',
+        width: { xs: '100%', md: 'flex' },
       }}
     >
       <Container maxWidth="lg">
@@ -62,7 +63,7 @@ export default function AppAppBar() {
                 display: 'flex',
                 flexDirection: { xs: 'column', sm: 'row' },
                 alignItems: 'center',
-                fontSize: 'clamp(1rem, 5vw, 1.5rem)',
+                fontSize: {xs:'clamp(0.7rem, 3vw, 1rem)', sm: 'clamp(1rem, 3vw, 1.5rem)'},
               
               }}
                         >
@@ -86,61 +87,20 @@ export default function AppAppBar() {
           </Box>
           <Box
             sx={{
-              display: { xs: 'none', md: 'flex' },
+              display: { xs: 'flex', md: 'flex' },
               gap: 1,
               alignItems: 'center',
             }}
           >
-            <Button color="primary" variant="text" size="small" onClick={() => navigate('/cadastro')}>
+            <Button color="primary" variant="text" size="smaller" onClick={() => navigate('/cadastro')}>
               Cadastrar
             </Button>
-            <Button color="primary" variant="contained" size="small" onClick={() => navigate('/login')}>
+            <Button color="primary" variant="contained" size="smaller" onClick={() => navigate('/login')}>
               Entrar
             </Button>
-            <ColorModeIconDropdown />
+            <ColorModeIconDropdown size="small"/>
           </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 1 }}>
-            <ColorModeIconDropdown size="medium" />
-            <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
-              <MenuIcon />
-            </IconButton>
-            <Drawer
-              anchor="top"
-              open={open}
-              onClose={toggleDrawer(false)}
-              PaperProps={{
-                sx: {
-                  top: 'var(--template-frame-height, 0px)',
-                },
-              }}
-            >
-              <Box sx={{ p: 2, backgroundColor: 'background.default' }}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                  }}
-                >
-                  <IconButton onClick={toggleDrawer(false)}>
-                    <CloseRoundedIcon />
-                  </IconButton>
-                </Box>
-
-                
-                <Divider sx={{ my: 3 }} />
-                <MenuItem>
-                  <Button color="primary" variant="contained" fullWidth onClick={() => navigate('/cadastro')}>
-                    Cadastrar
-                  </Button>
-                </MenuItem>
-                <MenuItem>
-                  <Button color="primary" variant="outlined" fullWidth onClick={() => navigate('/login')}>
-                    Entrar
-                  </Button>
-                </MenuItem>
-              </Box>
-            </Drawer>
-          </Box>
+          
         </StyledToolbar>
       </Container>
     </AppBar>
