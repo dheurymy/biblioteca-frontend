@@ -246,7 +246,7 @@ const Cadastro = (props) => {
             }}
           >
             {nome ? `Olá, ${nome}!` : 'Olá, Usuário!'}
-            {usuario ? ` ID: ${usuario}` : ''}
+            
           </Typography>
           <Box
             component="form"
