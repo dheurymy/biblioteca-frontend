@@ -60,7 +60,7 @@ export default function FAQ() {
               gutterBottom
               sx={{ maxWidth: { sm: '100%', md: '70%' } }}
             >
-              Não! Todos os serviços da Biblioteca <strong>Publica</strong> da Faculdade de Ohara são gratuitos para alunos e professores.
+              Não! Todos os serviços da Biblioteca <strong>Publica</strong> da Escola Municipal de Ohara são gratuitos para alunos e professores.
             </Typography>
           </AccordionDetails>
         </Accordion>
@@ -106,7 +106,7 @@ export default function FAQ() {
               gutterBottom
               sx={{ maxWidth: { sm: '100%', md: '70%' } }}
             >
-              Sim. A Biblioteca de Ohara possui um espaço de leitura, onde você pode consultar livros e materiais sem precisar pedir o empréstimo. O espaço de leitura é aberto ao público e não é necessário agendar horário.
+              Sim. A Biblioteca de Ohara possui um espaço de leitura, onde você pode consultar livros e materiais sem precisar pedir o empréstimo. O espaço de leitura é aberto aos alunos e professores da Escola Municipal de Ohara e não é necessário agendar horário.
             </Typography>
           </AccordionDetails>
         </Accordion>
@@ -129,7 +129,7 @@ export default function FAQ() {
               gutterBottom
               sx={{ maxWidth: { sm: '100%', md: '70%' } }}
             >
-              A biblioteca funciona das 07h as 21h de segunda a sexta e das 08h as 14h nos sabádos e domingos.
+              A biblioteca funciona das 07h as 17h de segunda a sexta..
             </Typography>
           </AccordionDetails>
         </Accordion>

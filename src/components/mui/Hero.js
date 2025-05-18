@@ -68,7 +68,7 @@ export default function Hero() {
                 width: { sm: '100%', md: '60%' },
               }}
             >
-              Na vastidão do mundo, onde histórias moldam destinos e o conhecimento é a chave para o futuro, a Biblioteca Pública da Universidade de Ohara, mais conhecida como <strong>Biblioteca de Ohara</strong>, se ergue como um bastião para aqueles que buscam sabedoria. Aqui, cada livro é um mapa, cada manuscrito é um tesouro, e cada visitante é um explorador pronto para desbravar o conhecimento. Nossa missão é manter viva a curiosidade e proporcionar um ambiente onde a aprendizagem se transforma em uma verdadeira aventura. <br></br>
+              Na vastidão do mundo, onde histórias moldam destinos e o conhecimento é a chave para o futuro, a Biblioteca Pública da Escola Municipal de Ohara, mais conhecida como <strong>Biblioteca de Ohara</strong>, se ergue como um bastião para aqueles que buscam sabedoria. Aqui, cada livro é um mapa, cada manuscrito é um tesouro, e cada visitante é um explorador pronto para desbravar o conhecimento. Nossa missão é manter viva a curiosidade e proporcionar um ambiente onde a aprendizagem se transforma em uma verdadeira aventura. <br></br>
               <ul>
                 <li><strong>Acervo Gigantesco</strong> – Dos clássicos da literatura mundial aos registros históricos mais profundos.</li>
                 <li><strong>Espaço para Pesquisas</strong> – Encontre respostas e expanda seus horizontes.</li>
