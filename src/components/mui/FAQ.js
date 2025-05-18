@@ -4,7 +4,6 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
@@ -39,7 +38,7 @@ export default function FAQ() {
           textAlign: { sm: 'left', md: 'center' },
         }}
       >
-        Frequently asked questions
+        Perguntas que geralmente nos fazem.
       </Typography>
       <Box sx={{ width: '100%' }}>
         <Accordion
@@ -52,7 +51,7 @@ export default function FAQ() {
             id="panel1d-header"
           >
             <Typography component="span" variant="subtitle2">
-              How do I contact customer support if I have a question or issue?
+              Os serviços da Biblioteca de Ohara são pagos?
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -61,10 +60,7 @@ export default function FAQ() {
               gutterBottom
               sx={{ maxWidth: { sm: '100%', md: '70%' } }}
             >
-              You can reach our customer support team by emailing&nbsp;
-              <Link href="mailto:support@email.com">support@email.com</Link>
-              &nbsp;or calling our toll-free number. We&apos;re here to assist you
-              promptly.
+              Não! Todos os serviços da Biblioteca <strong>Publica</strong> da Faculdade de Ohara são gratuitos para alunos e professores.
             </Typography>
           </AccordionDetails>
         </Accordion>
@@ -78,7 +74,7 @@ export default function FAQ() {
             id="panel2d-header"
           >
             <Typography component="span" variant="subtitle2">
-              Can I return the product if it doesn&apos;t meet my expectations?
+              Quanto tempo dura o empréstimo de livros?
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -87,9 +83,7 @@ export default function FAQ() {
               gutterBottom
               sx={{ maxWidth: { sm: '100%', md: '70%' } }}
             >
-              Absolutely! We offer a hassle-free return policy. If you&apos;re not
-              completely satisfied, you can return the product within [number of
-              days] days for a full refund or exchange.
+              Depende. Para alunos, o prazo de empréstimo é de 7 dias. Com possibilidade de renovar o empréstimo por mais 7 dias, caso não haja reserva. Já para professores, o prazo de empréstimo é de 30 dias. Com possibilidade de renovar o empréstimo por mais 30 dias, caso não haja reserva.
             </Typography>
           </AccordionDetails>
         </Accordion>
@@ -103,7 +97,7 @@ export default function FAQ() {
             id="panel3d-header"
           >
             <Typography component="span" variant="subtitle2">
-              What makes your product stand out from others in the market?
+              Consigo realizar consultas em um livro especifico sem precisar pedir o empréstimo?
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -112,9 +106,7 @@ export default function FAQ() {
               gutterBottom
               sx={{ maxWidth: { sm: '100%', md: '70%' } }}
             >
-              Our product distinguishes itself through its adaptability, durability,
-              and innovative features. We prioritize user satisfaction and
-              continually strive to exceed expectations in every aspect.
+              Sim. A Biblioteca de Ohara possui um espaço de leitura, onde você pode consultar livros e materiais sem precisar pedir o empréstimo. O espaço de leitura é aberto ao público e não é necessário agendar horário.
             </Typography>
           </AccordionDetails>
         </Accordion>
@@ -128,7 +120,7 @@ export default function FAQ() {
             id="panel4d-header"
           >
             <Typography component="span" variant="subtitle2">
-              Is there a warranty on the product, and what does it cover?
+              Qual o horário de funcionamento da Biblioteca?
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -137,10 +129,7 @@ export default function FAQ() {
               gutterBottom
               sx={{ maxWidth: { sm: '100%', md: '70%' } }}
             >
-              Yes, our product comes with a [length of warranty] warranty. It covers
-              defects in materials and workmanship. If you encounter any issues
-              covered by the warranty, please contact our customer support for
-              assistance.
+              A biblioteca funciona das 07h as 21h de segunda a sexta e das 08h as 14h nos sabádos e domingos.
             </Typography>
           </AccordionDetails>
         </Accordion>

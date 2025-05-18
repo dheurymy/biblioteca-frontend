@@ -10,15 +10,16 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import TwitterIcon from '@mui/icons-material/X';
+import InstagramIcon from '@mui/icons-material/Instagram';
 import SitemarkIcon from './SitemarkIcon';
+import { Link as ReactRouterLink } from 'react-router-dom';
 
 function Copyright() {
   return (
     <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
       {'Copyright © '}
-      <Link color="text.secondary" href="https://mui.com/">
-        Sitemark
+      <Link color="text.secondary" href="https://github.com/dheurymy">
+        Biblioteca de Ohara
       </Link>
       &nbsp;
       {new Date().getFullYear()}
@@ -27,6 +28,16 @@ function Copyright() {
 }
 
 export default function Footer() {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    alert('E-mail adicionado a nossa newsletter!');
+
+    const emailInput = document.getElementById('email-newsletter');
+    if (emailInput) {
+      emailInput.value = '';
+    }
+    
+  };
   return (
     <Container
       sx={{
@@ -57,10 +68,10 @@ export default function Footer() {
           <Box sx={{ width: { xs: '100%', sm: '60%' } }}>
             <SitemarkIcon />
             <Typography variant="body2" gutterBottom sx={{ fontWeight: 600, mt: 2 }}>
-              Join the newsletter
+              Fique por dentro das novidades!
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-              Subscribe for weekly updates. No spams ever!
+              Inscreva seu e-mail na nossa newsletter de informações. <br></br> Não enviamos span, NUNCA!
             </Typography>
             <InputLabel htmlFor="email-newsletter">Email</InputLabel>
             <Stack direction="row" spacing={1} useFlexGap>
@@ -70,8 +81,8 @@ export default function Footer() {
                 size="small"
                 variant="outlined"
                 fullWidth
-                aria-label="Enter your email address"
-                placeholder="Your email address"
+                aria-label="Digite seu endereço de e-mail"
+                placeholder="seu endereço de e-mail"
                 slotProps={{
                   htmlInput: {
                     autoComplete: 'off',
@@ -85,8 +96,9 @@ export default function Footer() {
                 color="primary"
                 size="small"
                 sx={{ flexShrink: 0 }}
+                onClick={handleSubmit}
               >
-                Subscribe
+                Inscrever
               </Button>
             </Stack>
           </Box>
@@ -99,64 +111,18 @@ export default function Footer() {
           }}
         >
           <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-            Product
+            Biblioteca
           </Typography>
-          <Link color="text.secondary" variant="body2" href="#">
-            Features
+          <Link color="text.secondary" variant="body2" component={ReactRouterLink} to="/login">
+            Login
           </Link>
-          <Link color="text.secondary" variant="body2" href="#">
-            Testimonials
+          <Link color="text.secondary" variant="body2" component={ReactRouterLink} to="/cadastro">
+            Cadastro
           </Link>
-          <Link color="text.secondary" variant="body2" href="#">
-            Highlights
-          </Link>
-          <Link color="text.secondary" variant="body2" href="#">
-            Pricing
-          </Link>
-          <Link color="text.secondary" variant="body2" href="#">
-            FAQs
-          </Link>
+          
         </Box>
-        <Box
-          sx={{
-            display: { xs: 'none', sm: 'flex' },
-            flexDirection: 'column',
-            gap: 1,
-          }}
-        >
-          <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-            Company
-          </Typography>
-          <Link color="text.secondary" variant="body2" href="#">
-            About us
-          </Link>
-          <Link color="text.secondary" variant="body2" href="#">
-            Careers
-          </Link>
-          <Link color="text.secondary" variant="body2" href="#">
-            Press
-          </Link>
-        </Box>
-        <Box
-          sx={{
-            display: { xs: 'none', sm: 'flex' },
-            flexDirection: 'column',
-            gap: 1,
-          }}
-        >
-          <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-            Legal
-          </Typography>
-          <Link color="text.secondary" variant="body2" href="#">
-            Terms
-          </Link>
-          <Link color="text.secondary" variant="body2" href="#">
-            Privacy
-          </Link>
-          <Link color="text.secondary" variant="body2" href="#">
-            Contact
-          </Link>
-        </Box>
+        
+        
       </Box>
       <Box
         sx={{
@@ -170,13 +136,13 @@ export default function Footer() {
       >
         <div>
           <Link color="text.secondary" variant="body2" href="#">
-            Privacy Policy
+            Política de Privacidade
           </Link>
           <Typography sx={{ display: 'inline', mx: 0.5, opacity: 0.5 }}>
             &nbsp;•&nbsp;
           </Typography>
           <Link color="text.secondary" variant="body2" href="#">
-            Terms of Service
+            Termos de Uso
           </Link>
           <Copyright />
         </div>
@@ -189,7 +155,7 @@ export default function Footer() {
           <IconButton
             color="inherit"
             size="small"
-            href="https://github.com/mui"
+            href="https://github.com/dheurymy"
             aria-label="GitHub"
             sx={{ alignSelf: 'center' }}
           >
@@ -198,16 +164,16 @@ export default function Footer() {
           <IconButton
             color="inherit"
             size="small"
-            href="https://x.com/MaterialUI"
-            aria-label="X"
+            href="https://www.instagram.com/dheurymy/"
+            aria-label=""
             sx={{ alignSelf: 'center' }}
           >
-            <TwitterIcon />
+            <InstagramIcon />
           </IconButton>
           <IconButton
             color="inherit"
             size="small"
-            href="https://www.linkedin.com/company/mui/"
+            href="https://www.linkedin.com/in/dheurymy/"
             aria-label="LinkedIn"
             sx={{ alignSelf: 'center' }}
           >
