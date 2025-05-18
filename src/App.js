@@ -1,13 +1,15 @@
 import React from 'react';
 import { Routes, Route, BrowserRouter as Router } from 'react-router-dom';
 
-import { AuthProvider } from './context/AuthContext';
+
 
 import Home from './components/Home';
 
 import Login from './components/Login';
 import Cadastro from './components/Cadastro';
 import CadastroEndereco from './components/CadastroEndereco';
+import CadastroLivro from './components/CadastroLivro';
+import ListaLivros from './components/ListaLivros';
 
 
 function App() {
@@ -18,7 +20,10 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/cadastro-endereco" element={<CadastroEndereco />} />
+          <Route path="/cadastro-livro" element={<CadastroLivro />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/lista-livros" element={<ListaLivros />} />
+          {/* Adicione outras rotas conforme necessário */}
         </Routes>
       </div>
     </Router>
