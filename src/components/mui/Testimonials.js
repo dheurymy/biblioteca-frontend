@@ -96,12 +96,13 @@ export default function Testimonials() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+
         gap: { xs: 3, sm: 6 },
       }}
     >
       <Box
         sx={{
-          width: { sm: '100%', md: '60%' },
+          width: { sm: '100%', md: '100%' },
           textAlign: { sm: 'left', md: 'center' },
         }}
       >
@@ -121,9 +122,12 @@ export default function Testimonials() {
         width: { sm: '100%', md: '100%' },
         textAlign: { sm: 'center', md: 'center' },
         display: 'flex',
+        flexDirection: {xs: 'column', sm: 'row'},
         gap: 2
       }}>
-        <FormControl >
+        <FormControl sx={{
+          flex: 1
+        }} >
           <FormLabel htmlFor="ordem">Ordenação:</FormLabel>
           <TextField
             required
@@ -143,7 +147,9 @@ export default function Testimonials() {
             <option value="ZA">Z-A</option>
           </TextField>
         </FormControl>
-        <FormControl >
+        <FormControl sx={{
+          flex: 1
+        }} >
           <FormLabel htmlFor="autor">Autor:</FormLabel>
           <TextField
             required
@@ -166,7 +172,10 @@ export default function Testimonials() {
             ))}
           </TextField>
         </FormControl>
-        <FormControl >
+
+        <FormControl sx={{
+          flex: 1
+        }}>
           <FormLabel htmlFor="genero">Gênero:</FormLabel>
           <TextField
             required
@@ -190,7 +199,9 @@ export default function Testimonials() {
           </TextField>
         </FormControl>
 
-        <FormControl>
+        <FormControl sx={{
+          flex: 1
+        }}>
           <FormLabel htmlFor="pesquisa">Livro:</FormLabel>
           <TextField
             autoComplete="pesquisa"
@@ -205,8 +216,10 @@ export default function Testimonials() {
 
           />
         </FormControl>
+        
 
       </Box>
+     
       <Grid container spacing={2}>
         {livrosOrdenados.length === 0 && (
           <Typography variant="body1" sx={{ color: 'text.secondary' }}>
