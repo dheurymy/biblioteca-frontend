@@ -319,7 +319,7 @@ const Cadastro = (props) => {
                   </option>
                   <option value="aluno"> Aluno</option>
                   <option value="professor"> Professor</option>
-                  <option value="funcionario"> Funcionário</option>
+                  
                 </TextField>
               </FormControl>
 
