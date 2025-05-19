@@ -10,6 +10,7 @@ import Cadastro from './components/Cadastro';
 import CadastroEndereco from './components/CadastroEndereco';
 import CadastroLivro from './components/CadastroLivro';
 import ListaLivros from './components/ListaLivros';
+import HomeFuncionario from './components/HomeFuncionario';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/cadastro-livro" element={<CadastroLivro />} />
           <Route path="/login" element={<Login />} />
           <Route path="/lista-livros" element={<ListaLivros />} />
+          <Route path='/funcionario' element={<HomeFuncionario/>}/>
           {/* Adicione outras rotas conforme necessário */}
         </Routes>
       </div>
