@@ -9,6 +9,11 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 
 
+import FormLabel from '@mui/material/FormLabel';
+import FormControl from '@mui/material/FormControl';
+import TextField from '@mui/material/TextField';
+
+
 
 
 
@@ -23,33 +28,63 @@ export default function Testimonials() {
 
 
   const [livros, setLivros] = useState([]);
+  const [sortOrder, setSortOrder] = useState('AZ');
+  const [pesquisa, setPesquisa] = useState('');
+  const [filtroAutor, setFiltroAutor] = useState('');
+  const [filtroGenero, setFiltroGenero] = useState('');
 
-   useEffect(() => {
-      const pegarLivros = async () => {
-        try {
-          const response = await fetch('https://biblioteca-backend-kappa.vercel.app/livros', {
-            method: 'GET',
-            headers: {
-              
-              'Content-Type': 'application/json'
-            }
-          });
-          const data = await response.json();
-          if (response.ok) {
-            console.log(data);
-            setLivros(data.livros);
-          } else {
-            console.error(data.message);
-            
+  useEffect(() => {
+    const pegarLivros = async () => {
+      try {
+        const response = await fetch('https://biblioteca-backend-kappa.vercel.app/livros', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
           }
-        } catch (error) {
-          console.error('Erro ao buscar livros:', error);
+        });
+        const data = await response.json();
+        if (response.ok) {
+          console.log(data);
+          setLivros(data.livros);
+        } else {
+          console.error(data.message);
         }
-      };
-  
-      pegarLivros();
-      console.log(livros);
-    });
+      } catch (error) {
+        console.error('Erro ao buscar livros:', error);
+      }
+    };
+
+    pegarLivros();
+  }, []);
+
+
+  const autores = [...new Set(livros.map(livro => livro.autor))].sort();
+  console.log(autores);
+
+
+  const generos = [...new Set(livros.map(livro => livro.genero))].sort();
+  console.log(generos);
+
+  const livrosFiltrados = livros.filter(livro => {
+    const filtradosAutor = filtroAutor ? livro.autor === filtroAutor : true;
+    const filtradosGenero = filtroGenero ? livro.genero === filtroGenero : true;
+
+
+    return filtradosAutor && filtradosGenero;
+  }).filter(livro => livro.titulo.toLowerCase().includes(pesquisa.toLowerCase())
+  );
+
+  const livrosOrdenados = livrosFiltrados.sort((a, b) => {
+    if (sortOrder === 'AZ') {
+      return a.titulo.localeCompare(b.titulo);
+    } else {
+      return b.titulo.localeCompare(a.titulo);
+    }
+  });
+
+
+
+
 
   return (
     <Container
@@ -82,9 +117,105 @@ export default function Testimonials() {
           Veja abaixo os livros disponíveis no nosso acervo.
         </Typography>
       </Box>
+      <Box sx={{
+        width: { sm: '100%', md: '100%' },
+        textAlign: { sm: 'center', md: 'center' },
+        display: 'flex',
+        gap: 2
+      }}>
+        <FormControl >
+          <FormLabel htmlFor="ordem">Ordenação:</FormLabel>
+          <TextField
+            required
+            fullWidth
+            name="ordem"
+            id="ordem"
+            select
+            SelectProps={{ native: true }}
+            variant="outlined"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
+            <option value="" disabled>
+              Selecione a ordem
+            </option>
+            <option value="AZ">A-Z</option>
+            <option value="ZA">Z-A</option>
+          </TextField>
+        </FormControl>
+        <FormControl >
+          <FormLabel htmlFor="autor">Autor:</FormLabel>
+          <TextField
+            required
+            fullWidth
+            name="autor"
+            id="autor"
+            select
+            SelectProps={{ native: true }}
+            variant="outlined"
+            value={filtroAutor}
+            onChange={(e) => setFiltroAutor(e.target.value)}
+          >
+            <option value="" >
+              Selecione o autor
+            </option>
+            {autores.map((autor) => (
+              <option key={autor} value={autor}>
+                {autor}
+              </option>
+            ))}
+          </TextField>
+        </FormControl>
+        <FormControl >
+          <FormLabel htmlFor="genero">Gênero:</FormLabel>
+          <TextField
+            required
+            fullWidth
+            name="genero"
+            id="genero"
+            select
+            SelectProps={{ native: true }}
+            variant="outlined"
+            value={filtroGenero}
+            onChange={(e) => setFiltroGenero(e.target.value)}
+          >
+            <option value="" >
+              Selecione o genero
+            </option>
+            {generos.map((genero) => (
+              <option key={genero} value={genero}>
+                {genero}
+              </option>
+            ))}
+          </TextField>
+        </FormControl>
+
+        <FormControl>
+          <FormLabel htmlFor="pesquisa">Livro:</FormLabel>
+          <TextField
+            autoComplete="pesquisa"
+            name="pesquisa"
+            required
+            fullWidth
+            id="pesquisa"
+            placeholder="Percy Jackson"
+            value={pesquisa}
+            onChange={(e) => setPesquisa(e.target.value)}
+
+
+          />
+        </FormControl>
+
+      </Box>
       <Grid container spacing={2}>
-        {livros.map((livro, index) => (
-          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index} sx={{ display: 'flex' }}>
+        {livrosOrdenados.length === 0 && (
+          <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+            Infelizmente, não temos esse.
+          </Typography>
+        )}
+
+        {livrosOrdenados.map((livro, index) => (
+          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index} sx={{ display: 'flex', minWidth: '300px' }}>
             <Card
               variant="outlined"
               sx={{
@@ -100,8 +231,8 @@ export default function Testimonials() {
                   gutterBottom
                   sx={{ color: 'text.secondary' }}
                 >
-                  Autoria: {livro.autor} &nbsp;&nbsp;&nbsp;&nbsp; Ano: {livro.anoPublicacao}<br></br> 
-                  Gênero: {livro.genero} &nbsp;&nbsp;&nbsp;&nbsp; Editora: {livro.editora} 
+                  Autoria: {livro.autor} &nbsp;&nbsp;&nbsp;&nbsp; Ano: {livro.anoPublicacao}<br></br>
+                  Gênero: {livro.genero} &nbsp;&nbsp;&nbsp;&nbsp; Editora: {livro.editora}
                 </Typography>
               </CardContent>
               <Box
@@ -112,13 +243,13 @@ export default function Testimonials() {
                 }}
               >
                 <CardHeader
-                  
+
                   title={livro.titulo}
-                  
+
                   subheader={livro.quantidade > 1 ? 'Status: Disponível' : 'Status: Somente Consulta'}
-                  
+
                 />
-               
+
               </Box>
             </Card>
           </Grid>
