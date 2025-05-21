@@ -255,7 +255,8 @@ return (
                 >
                   Autoria: {livro.autor} &nbsp;&nbsp;&nbsp;&nbsp; Ano: {livro.anoPublicacao}<br></br>
                   Gênero: {livro.genero} &nbsp;&nbsp;&nbsp;&nbsp; Editora: {livro.editora} <br></br>
-                  ISBN: {livro.isbn}
+                  ISBN: {livro.isbn}       <br></br>            
+                  Localização: {livro.localizacao}
                 </Typography>
               </CardContent>
               <Box
