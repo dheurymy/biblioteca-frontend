@@ -1,13 +1,21 @@
-import * as React from 'react';
+
+import React, { useState } from "react";
 import { styled, alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
+import MenuItem from '@mui/material/MenuItem';
+import Drawer from '@mui/material/Drawer';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ColorModeIconDropdown from './ColorModeIconDropdown';
 import Typography from '@mui/material/Typography';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -25,10 +33,27 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   padding: '8px 12px',
 }));
 
-export default function AppAppBar() {
- 
+export default function AppAppBarOut( {handleNavChange}) {
+  const [open, setOpen] = React.useState(false);
+
+  const navigate = useNavigate();
+   const [navUsu, setNavUsu] = useState("");
 
   
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('funcionario');
+    localStorage.removeItem('usuario');
+    localStorage.removeItem('endereco');
+
+    navigate('/');
+  };
+
+
+  const toggleDrawer = (newOpen) => () => {
+    setOpen(newOpen);
+  };
 
   return (
     <AppBar
@@ -43,19 +68,18 @@ export default function AppAppBar() {
     >
       <Container maxWidth="lg">
         <StyledToolbar variant="dense" disableGutters>
-          <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
-            
-            <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-              <Typography
+          <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 0 }}>
+
+            <Typography
               variant="h1"
               sx={{
                 display: 'flex',
                 flexDirection: { xs: 'column', sm: 'row' },
                 alignItems: 'center',
-                fontSize: 'clamp(1rem, 5vw, 1.5rem)',
-              
+                fontSize: { xs: 'clamp(0.7rem, 3vw, 1rem)', sm: 'clamp(1rem, 3vw, 1.5rem)' },
+
               }}
-                        >
+            >
               Biblioteca&nbsp;de&nbsp;
               <Typography
                 component="span"
@@ -70,24 +94,64 @@ export default function AppAppBar() {
               >
                 Ohara
               </Typography>
-                        </Typography>
-            </Link>
+            </Typography>
             
+
+            <Box sx={{ display: { xs: 'none', md: 'flex', gap: 3 } }}>
+
+              <Button variant="text" color="info" size="small" onClick={() => handleNavChange("acervo")}>
+                Acervo
+              </Button>
+              <Button variant="text" color="info" size="small"onClick={() => handleNavChange("emprestimos")}>
+                Empréstimos
+              </Button>
+              <Button variant="text" color="info" size="small" onClick={() => handleNavChange("dados")}>
+                Meus Dados
+              </Button>
+              <Button variant="text" color="info" size="small" onClick={logout}>
+                Sair
+              </Button>
+              <ColorModeIconDropdown />
+
+            </Box>
           </Box>
-          <Box
-            sx={{
-              display: { xs: 'none', md: 'flex' },
-              gap: 1,
-              alignItems: 'center',
-            }}
-          >
-            
-            <ColorModeIconDropdown />
-          </Box>
+
           <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 1 }}>
             <ColorModeIconDropdown size="medium" />
-           
-            
+            <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
+              <MenuIcon />
+            </IconButton>
+            <Drawer
+              anchor="top"
+              open={open}
+              onClose={toggleDrawer(false)}
+              PaperProps={{
+                sx: {
+                  top: 'var(--template-frame-height, 0px)',
+                },
+              }}
+            >
+              <Box sx={{ p: 2, backgroundColor: 'background.default' }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                  }}
+                >
+                  <IconButton onClick={toggleDrawer(false)}>
+                    <CloseRoundedIcon />
+                  </IconButton>
+                </Box>
+
+
+                <MenuItem onClick={() => handleNavChange("acervo")}>Acervo</MenuItem>
+                <MenuItem onClick={() => handleNavChange("emprestimos")}>Empréstimos</MenuItem>
+                <MenuItem onClick={() => handleNavChange("dados")}>Meus Dados</MenuItem>
+                <MenuItem onClick={logout}>Sair</MenuItem>
+
+
+              </Box>
+            </Drawer>
           </Box>
         </StyledToolbar>
       </Container>

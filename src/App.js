@@ -10,7 +10,7 @@ import Cadastro from './components/Cadastro';
 import CadastroEndereco from './components/CadastroEndereco';
 import CadastroLivro from './components/CadastroLivro';
 import ListaLivros from './components/ListaLivros';
-import HomeFuncionario from './components/HomeFuncionario';
+import HomeUsuario from './components/HomeUsuario';
 import CadastroFuncionario from './components/CadastroFuncionario';
 
 
@@ -24,8 +24,8 @@ function App() {
           <Route path="/cadastro-endereco" element={<CadastroEndereco />} />
           <Route path="/cadastro-livro" element={<CadastroLivro />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/lista-livros" element={<ListaLivros />} />
-          <Route path='/home-funcionario' element={<HomeFuncionario/>}/>
+          <Route path="/lista-livros-usuario" element={<ListaLivros />} />
+          <Route path='/home' element={<HomeUsuario/>}/>
           <Route path='/funcionario' element={<CadastroFuncionario/>}/>
           {/* Adicione outras rotas conforme necessário */}
         </Routes>

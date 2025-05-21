@@ -33,6 +33,10 @@ export default function Testimonials() {
   const [filtroAutor, setFiltroAutor] = useState('');
   const [filtroGenero, setFiltroGenero] = useState('');
 
+  const [texto, setTexto] = useState(true);
+
+
+
   useEffect(() => {
     const pegarLivros = async () => {
       try {
@@ -44,10 +48,12 @@ export default function Testimonials() {
         });
         const data = await response.json();
         if (response.ok) {
+          setTexto(false);
           console.log(data);
           setLivros(data.livros);
         } else {
           console.error(data.message);
+          setTexto(true);
         }
       } catch (error) {
         console.error('Erro ao buscar livros:', error);
@@ -64,6 +70,8 @@ export default function Testimonials() {
 
   const generos = [...new Set(livros.map(livro => livro.genero))].sort();
   console.log(generos);
+
+  
 
   const livrosFiltrados = livros.filter(livro => {
     const filtradosAutor = filtroAutor ? livro.autor === filtroAutor : true;
@@ -84,10 +92,9 @@ export default function Testimonials() {
 
 
 
-
-
-  return (
-    <Container
+return (
+     
+      <Container
       id="testimonials"
       sx={{
         pt: { xs: 4, sm: 12 },
@@ -221,11 +228,12 @@ export default function Testimonials() {
       </Box>
      
       <Grid container spacing={2}>
-        {livrosOrdenados.length === 0 && (
+        {livrosOrdenados.length === 0 && texto == false && (
           <Typography variant="body1" sx={{ color: 'text.secondary' }}>
             Infelizmente, não temos esse.
           </Typography>
         )}
+        {texto ? "Buscando livros..." : "" }
 
         {livrosOrdenados.map((livro, index) => (
           <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index} sx={{ display: 'flex', minWidth: '300px' }}>
@@ -235,7 +243,8 @@ export default function Testimonials() {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                flexGrow: 1,
+                flexGrow: 1, 
+                borderColor: (livro.quantidade > 1 ? 'Highlight' : 'GrayText')
               }}
             >
               <CardContent>
@@ -245,7 +254,8 @@ export default function Testimonials() {
                   sx={{ color: 'text.secondary' }}
                 >
                   Autoria: {livro.autor} &nbsp;&nbsp;&nbsp;&nbsp; Ano: {livro.anoPublicacao}<br></br>
-                  Gênero: {livro.genero} &nbsp;&nbsp;&nbsp;&nbsp; Editora: {livro.editora}
+                  Gênero: {livro.genero} &nbsp;&nbsp;&nbsp;&nbsp; Editora: {livro.editora} <br></br>
+                  ISBN: {livro.isbn}
                 </Typography>
               </CardContent>
               <Box
@@ -269,5 +279,8 @@ export default function Testimonials() {
         ))}
       </Grid>
     </Container>
-  );
+    )
+
+    
+  
 }

@@ -1,38 +1,33 @@
 
-
+import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
 import CssBaseline from '@mui/material/CssBaseline';
 
 
 
 import Stack from '@mui/material/Stack';
-import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import AppTheme from './mui/AppTheme';
-import Livros from './mui/Livros';
+
+
+
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+
+
+
 
 
 
 import AppAppBarOut from "./mui/AppAppBarOut";
+import AppAppBar from "./mui/AppAppBar";
+import ListaLivros from "./ListaLivros";
 
-const Card = styled(MuiCard)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignSelf: 'center',
-  width: '100%',
-  padding: theme.spacing(4),
-  gap: theme.spacing(2),
-  margin: 'auto',
-  boxShadow:
-    'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
-  [theme.breakpoints.up('sm')]: {
-    width: '450px',
-  },
-  ...theme.applyStyles('dark', {
-    boxShadow:
-      'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
-  }),
-}));
 
 const SignUpContainer = styled(Stack)(({ theme }) => ({
   height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
@@ -57,18 +52,18 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-const Cadastro = (props) => {
- 
+const EmprestimosUsuario = (props) => {
+  const navigate = useNavigate();
+
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
-     
-      <SignUpContainer direction="column" justifyContent="space-between" marginTop={10}>
-        <Livros />
-       
-      </SignUpContainer>
+      emprestimos
+      
+
+      
     </AppTheme>
   )
 };
 
-export default Cadastro;
+export default EmprestimosUsuario;

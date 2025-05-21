@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import React, {  useState } from "react";
 import Box from '@mui/material/Box';
 
 import Button from '@mui/material/Button';
@@ -16,6 +16,7 @@ import { styled } from '@mui/material/styles';
 import AppTheme from '../components/mui/AppTheme';
 
 import AppAppBar from "./mui/AppAppBar";
+import { useNavigate } from "react-router-dom";
 
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -61,6 +62,8 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 }));
 
 const Login = (props) => {
+  const navigate = useNavigate();
+   const [botao, setBotao] = React.useState(false);
 
   const [formData, setFormData] = useState({
 
@@ -79,55 +82,110 @@ const Login = (props) => {
   };
 
   const handleChange = (event) => {
-        const { name, value } = event.target;
-        let formattedValue = value;
-        if (name === "cpf") {
-          formattedValue = formatarCPF(value);
-        } 
-        setFormData((prevData) => ({
-          ...prevData,
-          [name]: formattedValue,
-        }));
-      };
+    const { name, value } = event.target;
+    let formattedValue = value;
+    if (name === "cpf") {
+      formattedValue = formatarCPF(value);
+    }
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: formattedValue,
+    }));
+  };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
 
-    const { nome, email, cpf, telefone, senha, tipoUsuario } = formData;
+    event.preventDefault();
+    setBotao(true);
+
+    const { cpf, senha } = formData;
+    let dadosUsuario = "";
+    let tipoUsuario = "";
+    let link = "";
 
     try {
-      const response = await fetch('https://biblioteca-backend-kappa.vercel.app/usuarios/login', {
+      // Primeiro, verifica se o usuário é comum
+      const responseUsuario = await fetch(`https://biblioteca-backend-kappa.vercel.app/usuarios/verifica`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ nome, email, cpf, telefone, senha, tipoUsuario }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cpf })
       });
 
-      // Tenta converter a resposta para JSON, mas captura erros caso falhe
+      if (responseUsuario.ok) {
+        dadosUsuario = await responseUsuario.json();
+        console.log(dadosUsuario);
+        if (dadosUsuario.existeUsuario) {
+          tipoUsuario = "usuario";
+        } else {
+          // Se a primeira tentativa falhar, executa a segunda
+          const responseFuncionario = await fetch(`https://biblioteca-backend-kappa.vercel.app/funcionarios/verifica`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ cpf })
+          });
+
+          if (responseFuncionario.ok) {
+            dadosUsuario = await responseFuncionario.json();
+            console.log(dadosUsuario);
+            if (dadosUsuario.existeFuncionario) {
+              tipoUsuario = "funcionario";
+            }
+
+          }
+        }
+
+      }
+
+      // Define o link com base no tipo de usuário identificado
+      link = tipoUsuario === "funcionario"
+        ? "https://biblioteca-backend-kappa.vercel.app/funcionarios/login"
+        : "https://biblioteca-backend-kappa.vercel.app/usuarios/login";
+
+      // Agora tenta fazer o login com o usuário identificado
+      const responseLogin = await fetch(link, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cpf, senha })
+      });
+
       let data;
       try {
-        data = await response.json();
+        data = await responseLogin.json();
+        console.log(data);
       } catch {
         data = { message: "Erro inesperado do servidor." };
       }
 
-      if (response.ok) {
+      if (responseLogin.ok) {
+        localStorage.setItem('token', data.token); // Armazena o token no localStorage
+        if (tipoUsuario === "funcionario") {
+          localStorage.setItem('funcionario', JSON.stringify(data.funcionario));
+          console.log(localStorage.funcionario);
+        } else {
+          localStorage.setItem('usuario', JSON.stringify(data.usuario));
+          localStorage.setItem('endereco', JSON.stringify(data.endereco));
+
+          console.log(localStorage.usuario);
+          console.log(localStorage.endereco);
+        }
+
+
         alert("Login efetuado com sucesso!");
+        navigate('/home')
       } else {
-        alert(data.mensagem || data.message || "Erro ao logar usuário.");
+        alert(data.mensagem || data.message || "Erro ao logar.");
       }
     } catch (error) {
-      console.error("Erro ao logar:", error);
-      alert("Erro ao logar usuário. Tente novamente mais tarde.");
+      console.error("Erro na verificação ou login:", error);
+      alert("Erro ao processar a requisição. Tente novamente mais tarde.");
+      setBotao(false);
     }
-
   };
   return (
     <AppTheme {...props}>
       <AppAppBar />
       <CssBaseline enableColorScheme />
-      
+
       <SignUpContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
 
@@ -163,7 +221,7 @@ const Login = (props) => {
                 onChange={handleChange}
                 variant="outlined"
                 value={formData.cpf}
-                
+
               />
             </FormControl>
 
@@ -200,15 +258,16 @@ const Login = (props) => {
               fullWidth
               variant="contained"
               onClick={handleSubmit}
+              color={botao ? 'secondary' : 'primary'}
             >
-              Entrar
+              {botao ? 'Entrando...' : 'Entrar'}
             </Button>
           </Box>
-          
+
         </Card>
       </SignUpContainer>
     </AppTheme>
   )
 };
 
-export default Login  ;
+export default Login;
