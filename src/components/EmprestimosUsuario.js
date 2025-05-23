@@ -1,18 +1,17 @@
 
-import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
 
 import CssBaseline from '@mui/material/CssBaseline';
 
 
 
-import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
 import AppTheme from './mui/AppTheme';
 
 
 
 import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -24,44 +23,155 @@ import Grid from '@mui/material/Grid';
 
 
 
-import AppAppBarOut from "./mui/AppAppBarOut";
-import AppAppBar from "./mui/AppAppBar";
-import ListaLivros from "./ListaLivros";
 
 
-const SignUpContainer = styled(Stack)(({ theme }) => ({
-  height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
-  minHeight: '100%',
-  padding: theme.spacing(2),
-  [theme.breakpoints.up('sm')]: {
-    padding: theme.spacing(4),
-  },
-  '&::before': {
-    content: '""',
-    display: 'block',
-    position: 'absolute',
-    zIndex: -1,
-    inset: 0,
-    backgroundImage:
-      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-    backgroundRepeat: 'no-repeat',
-    ...theme.applyStyles('dark', {
-      backgroundImage:
-        'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-    }),
-  },
-}));
 
 const EmprestimosUsuario = (props) => {
-  const navigate = useNavigate();
+
+  const [texto, setTexto] = useState(true);
+  const [emprestimos, setEmprestimos] = useState([]);
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+
+  useEffect(() => {
+    const pegarEmprestimos = async () => {
+      try {
+        const response = await fetch(`https://biblioteca-backend-kappa.vercel.app/emprestimos/${usuario._id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setTexto(false);
+
+          setEmprestimos(data.emprestimos);
+
+
+        } else {
+          console.error(data.message);
+          setTexto(true);
+        }
+      } catch (error) {
+        console.error('Erro ao buscar emprestimos:', error);
+      }
+    };
+
+    pegarEmprestimos();
+  }, []);
+
+
+
+  const emprestimosFiltrados = emprestimos.filter(emprestimo => emprestimo.usuarioId._id === usuario._id);
+  console.log(emprestimosFiltrados);
+
+
+
+
+
+
+
 
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
-      emprestimos
-      
 
-      
+      <Container
+        id="testimonials"
+        sx={{
+          pt: { xs: 4, sm: 12 },
+          pb: { xs: 8, sm: 16 },
+          position: 'relative',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+
+          gap: { xs: 3, sm: 6 },
+        }}
+      >
+        <Box
+          sx={{
+            width: { sm: '100%', md: '100%' },
+            textAlign: { sm: 'left', md: 'center' },
+          }}
+        >
+          <Typography
+            component="h2"
+            variant="h4"
+            gutterBottom
+            sx={{ color: 'text.primary' }}
+          >
+            Meus Empréstimos
+          </Typography>
+          <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+            Veja abaixo os seus empréstimos.
+          </Typography>
+        </Box>
+
+
+        <Grid container spacing={2}>
+          {emprestimos.length === 0 && texto === false && (
+            <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+              Nenhum empréstimo para este usuário.
+            </Typography>
+          )}
+          {texto ? "Buscando empréstimos..." : ""}
+
+          {emprestimos.map((emprestimo, index) => (
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index} sx={{ display: 'flex', minWidth: '300px' }}>
+              <Card
+                variant="outlined"
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  flexGrow: 1,
+                  borderColor: "Highlight"
+                }}
+              >
+                <CardHeader
+
+                  title={emprestimo.livroId.titulo}
+
+                />
+                <CardContent>
+                  <Typography
+                    variant="body1"
+                    gutterBottom
+                    sx={{ color: 'text.secondary' }}
+
+                  >
+                    Status: {!emprestimo.dataDevolucaoReal
+                      ? (new Date(emprestimo.dataDevolucaoPrevista) >= new Date() ? "OK" : "Atrasado")
+                      : "Finalizado"} <br></br>
+                    Data de Empréstimo: {new Date(emprestimo.dataEmprestimo).toLocaleDateString("pt-BR", {timeZone: "UTC" })} <br></br>
+                    
+
+                    
+                    Data Limite para Devolução: {new Date(emprestimo.dataDevolucaoPrevista).toLocaleDateString("pt-BR", {timeZone: "UTC" })} <br></br>
+                    {emprestimo.dataDevolucaoReal ? `Data de Devolução Real: ${new Date(emprestimo.dataDevolucaoReal).toLocaleDateString("pt-BR", {timeZone: "UTC" })}` : ""}
+
+                  </Typography>
+                </CardContent>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}
+                >
+
+
+                </Box>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+
+
+
+
     </AppTheme>
   )
 };

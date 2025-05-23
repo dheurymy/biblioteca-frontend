@@ -8,8 +8,6 @@ import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 
 
-import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
 import AppTheme from './mui/AppTheme';
 
 
@@ -20,7 +18,6 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
 
 
 
@@ -29,28 +26,7 @@ import Grid from '@mui/material/Grid';
 
 
 
-const SignUpContainer = styled(Stack)(({ theme }) => ({
-  height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
-  minHeight: '100%',
-  padding: theme.spacing(2),
-  [theme.breakpoints.up('sm')]: {
-    padding: theme.spacing(4),
-  },
-  '&::before': {
-    content: '""',
-    display: 'block',
-    position: 'absolute',
-    zIndex: -1,
-    inset: 0,
-    backgroundImage:
-      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-    backgroundRepeat: 'no-repeat',
-    ...theme.applyStyles('dark', {
-      backgroundImage:
-        'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-    }),
-  },
-}));
+
 
 const DadosUsuario = (props) => {
   const navigate = useNavigate();
@@ -61,23 +37,27 @@ const DadosUsuario = (props) => {
   const [toggle, setToggle] = React.useState(false);
 
   const [formData, setFormData] = useState({
-    nome: "",
-    email: "",
-    cpf: "",
-    telefone: "",
+    nome: usuario.nome,
+    cpf: usuario.cpf,
+    email: usuario.email,
+
+    telefone: usuario.telefone,
+    senha: "",
+    tipoUsuario: usuario.tipoUsuario
+
 
   });
 
-  const [endData, setEndData] = useState(() => ({
+  const [endData, setEndData] = useState({
     usuarioId: usuario._id,
-    logradouro: "",
-    numero: "",
-    complemento: "",
-    bairro: "",
-    cidade: "",
-    estado: "",
-    cep: ""
-  }));
+    logradouro: endereco.logradouro,
+    numero: endereco.numero,
+    complemento: endereco.complemento,
+    bairro: endereco.bairro,
+    cidade: endereco.cidade,
+    estado: endereco.estado,
+    cep: endereco.cep
+  });
 
   const formatarCPF = (value) => {
     value = value.replace(/\D/g, "").slice(0, 11);
@@ -114,17 +94,23 @@ const DadosUsuario = (props) => {
       ...prevData,
       [name]: formattedValue,
     }));
+    setEndData((prevData) => ({
+      ...prevData,
+      [name]: formattedValue,
+    }));
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setBotao(true);
+    console.log(usuario._id);
+    console.log(formData);
 
     const { nome, email, cpf, telefone, senha, tipoUsuario } = formData;
 
     try {
-      const response = await fetch('https://biblioteca-backend-kappa.vercel.app/usuarios', {
-        method: 'POST',
+      const response = await fetch(`https://biblioteca-backend-kappa.vercel.app/usuarios/${usuario._id}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -133,39 +119,57 @@ const DadosUsuario = (props) => {
 
       // Tenta converter a resposta para JSON, mas captura erros caso falhe
       let data;
-      try {
-        data = await response.json();
-      } catch {
-        data = { message: "Erro inesperado do servidor." };
-      }
+
+      data = await response.json();
+
 
       if (response.ok) {
-        alert("Usuário registrado com sucesso!");
+        alert("Dados do usuário atualizado com sucesso!");
         setBotao(false);
-        setFormData({
-          nome: "",
-          email: "",
-          cpf: "",
-          telefone: "",
-          senha: "",
-          confirmaSenha: "",
-          tipoUsuario: "",
-        });
-        navigate('/cadastro-endereco', {
-          state: {
-            dadosUsuario: {
-              nome: data.usuario.nome,
-              usuarioId: data.usuario._id
-            },
-          }
-        });
+        localStorage.setItem('usuario', JSON.stringify(data.usuario));
       } else {
-        alert(data.mensagem || data.message || "Erro ao registrar usuário.");
+        alert(data.mensagem || data.message || "Erro ao atualizar usuário.");
         setBotao(false);
       }
     } catch (error) {
-      console.error("Erro ao registrar:", error);
-      alert("Erro ao registrar usuário. Tente novamente mais tarde.");
+      console.error("Erro ao atualizar:", error);
+      alert("Erro ao atualizar usuário. Tente novamente mais tarde.");
+    }
+
+  };
+
+  const handleSubmitEndereco = async (event) => {
+    event.preventDefault();
+    setBotao(true);
+
+    const { logradouro, numero, complemento, bairro, cidade, estado, cep } = formData;
+
+    try {
+      const response = await fetch(`https://biblioteca-backend-kappa.vercel.app/enderecos/${usuario._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ logradouro, numero, complemento, bairro, cidade, estado, cep }),
+      });
+
+      
+      let data;
+
+      data = await response.json();
+
+
+      if (response.ok) {
+        alert("Dados do endereço atualizados com sucesso!");
+        setBotao(false);
+        localStorage.setItem('endereco', JSON.stringify(data.endereco));
+      } else {
+        alert(data.mensagem || data.message || "Erro ao atualizar endereço.");
+        setBotao(false);
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar:", error);
+      alert("Erro ao atualizar endereço. Tente novamente mais tarde.");
     }
 
   };
@@ -367,9 +371,10 @@ const DadosUsuario = (props) => {
               </FormControl>
             </Box>
             <FormControl>
-              <FormLabel htmlFor="senha">Senha:</FormLabel>
+              <FormLabel htmlFor="senha">Senha (obrigatório):</FormLabel>
               <TextField
                 fullWidth
+                required
                 name="senha"
                 placeholder="••••••"
                 type="password"
@@ -394,7 +399,7 @@ const DadosUsuario = (props) => {
 
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmitEndereco}
             sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
           >
 
@@ -407,7 +412,7 @@ const DadosUsuario = (props) => {
                 fullWidth
                 id="logradouro"
                 placeholder="Vila do Clã Nara"
-                value={formData.logradouro}
+                value={endData.logradouro}
                 onChange={handleChange}
 
 
@@ -425,7 +430,7 @@ const DadosUsuario = (props) => {
                   name="numero"
                   autoComplete="numero"
                   variant="outlined"
-                  value={formData.numero}
+                  value={endData.numero}
                   onChange={handleChange}
 
 
@@ -443,7 +448,7 @@ const DadosUsuario = (props) => {
                   autoComplete="bairro"
 
                   variant="outlined"
-                  value={formData.bairro}
+                  value={endData.bairro}
                   onChange={handleChange}
 
 
@@ -467,7 +472,7 @@ const DadosUsuario = (props) => {
                   fullWidth
                   id="complemento"
                   placeholder="Floresta Ancestral"
-                  value={formData.complemento}
+                  value={endData.complemento}
                   onChange={handleChange}
 
 
@@ -482,7 +487,7 @@ const DadosUsuario = (props) => {
                   fullWidth
                   id="cidade"
                   placeholder="Vila Oculta da Folha"
-                  value={formData.cidade}
+                  value={endData.cidade}
                   onChange={handleChange}
 
 
@@ -508,7 +513,7 @@ const DadosUsuario = (props) => {
                   name="cep"
                   autoComplete="cep"
                   variant="outlined"
-                  value={formData.cep}
+                  value={endData.cep}
                   onChange={handleChange}
 
                 />
@@ -524,7 +529,7 @@ const DadosUsuario = (props) => {
                   select
                   SelectProps={{ native: true }}
                   variant="outlined"
-                  value={formData.estado}
+                  value={endData.estado}
                   onChange={handleChange}
 
 
@@ -570,7 +575,7 @@ const DadosUsuario = (props) => {
               type="submit"
               fullWidth
               variant="contained"
-              onClick={handleSubmit}
+              onClick={handleSubmitEndereco}
               color={botao ? 'secondary' : 'primary'}
             >
               {botao ? 'Alterando...' : 'Alterar Endereço'}

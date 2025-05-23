@@ -1,25 +1,15 @@
-const HomeUsuario = (props) => {
-  const navigate = useNavigate();
-  const [navUsu, setNavUsu] = useState("");
+<FormControl>
+  <FormLabel htmlFor="isbnLivro">ISBN do Livro:</FormLabel>
+  <TextField
+    autoComplete="isbnLivro"
+    name="isbnLivro"
+    required
+    fullWidth
+    id="isbnLivro"
+    placeholder="XXX.XXX.XXX-XX"
+    value={formData.isbnLivro}
+    onChange={handleChange}
 
-  useEffect(() => {
-    setNavUsu(localStorage.getItem('navUsu') || "");
-  }, []);
 
-  const handleNavChange = (newNavUsu) => {
-    localStorage.setItem('navUsu', newNavUsu);
-    setNavUsu(newNavUsu);
-  };
-
-  return (
-    <AppTheme {...props}>
-      <CssBaseline enableColorScheme />
-      <AppAppBarOut />
-
-      {navUsu === "acervo" && <ListaLivros />}
-      {navUsu === "emprestimos" && <EmprestimosUsuario />}
-    </AppTheme>
-  );
-};
-
-export default HomeUsuario;
+  />
+</FormControl>

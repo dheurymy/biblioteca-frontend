@@ -12,6 +12,7 @@ import CadastroLivro from './components/CadastroLivro';
 import ListaLivros from './components/ListaLivros';
 import HomeUsuario from './components/HomeUsuario';
 import CadastroFuncionario from './components/CadastroFuncionario';
+import CadastroEmprestimo from './components/CadastroEmprestimo';
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route path="/lista-livros-usuario" element={<ListaLivros />} />
           <Route path='/home' element={<HomeUsuario/>}/>
           <Route path='/funcionario' element={<CadastroFuncionario/>}/>
+          <Route path='/emprestimo' element={<CadastroEmprestimo/>}/>
           {/* Adicione outras rotas conforme necessário */}
         </Routes>
       </div>
