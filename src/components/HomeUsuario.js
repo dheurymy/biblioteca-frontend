@@ -29,6 +29,9 @@ import AppAppBar from "./mui/AppAppBar";
 import ListaLivros from "./ListaLivros";
 import EmprestimosUsuario from "./EmprestimosUsuario";
 import DadosUsuario from "./DadosUsuario";
+import EmprestimosFuncionario from "./EmprestimosFuncionario";
+import LivrosFuncionario from "./LivrosFuncionario";
+
 
 
 const SignUpContainer = styled(Stack)(({ theme }) => ({
@@ -58,13 +61,14 @@ const HomeUsuario = (props) => {
   const navigate = useNavigate();
   const usuario = JSON.parse(localStorage.getItem("usuario"));
   const endereco = JSON.parse(localStorage.getItem("endereco"));
+  const funcionario = JSON.parse(localStorage.getItem("funcionario"));
 
-  
+
   const [navUsu, setNavUsu] = React.useState(localStorage.getItem('navUsu') || "");
 
   const handleNavChange = (newNavUsu) => {
     localStorage.setItem('navUsu', newNavUsu);
-    setNavUsu(newNavUsu); // Atualiza estado imediatamente
+    setNavUsu(newNavUsu);
   };
 
   React.useEffect(() => {
@@ -75,12 +79,18 @@ const HomeUsuario = (props) => {
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
       <AppAppBarOut handleNavChange={handleNavChange} />
-      
-      {navUsu === "" && <ListaLivros />}
-      {navUsu === "acervo" && <ListaLivros />}
-      {navUsu === "emprestimos" && <EmprestimosUsuario />}
-      {navUsu === "dados" && <DadosUsuario  />}
-
+      {usuario ? (
+        navUsu === "" || navUsu === "acervo" ? <ListaLivros /> :
+          navUsu === "emprestimos" ? <EmprestimosUsuario /> :
+            navUsu === "dados" ? <DadosUsuario /> :
+              null
+      ) : null}
+      {funcionario ? (
+        navUsu === "" || navUsu === "acervo" ? <ListaLivros /> :
+          navUsu === "emprestimos" ? <EmprestimosFuncionario /> :
+            navUsu === "livros" ? <LivrosFuncionario /> :
+              null
+      ) : null}
 
 
 

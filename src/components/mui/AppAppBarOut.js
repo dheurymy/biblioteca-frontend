@@ -33,13 +33,16 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   padding: '8px 12px',
 }));
 
-export default function AppAppBarOut( {handleNavChange}) {
+export default function AppAppBarOut({ handleNavChange }) {
   const [open, setOpen] = React.useState(false);
 
   const navigate = useNavigate();
-   const [navUsu, setNavUsu] = useState("");
+  const [navUsu, setNavUsu] = useState("");
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  const endereco = JSON.parse(localStorage.getItem("endereco"));
+  const funcionario = JSON.parse(localStorage.getItem("funcionario"));
 
-  
+
 
   const logout = () => {
     localStorage.removeItem('token');
@@ -95,25 +98,50 @@ export default function AppAppBarOut( {handleNavChange}) {
                 Ohara
               </Typography>
             </Typography>
-            
 
-            <Box sx={{ display: { xs: 'none', md: 'flex', gap: 3 } }}>
 
-              <Button variant="text" color="info" size="small" onClick={() => handleNavChange("acervo")}>
-                Acervo
-              </Button>
-              <Button variant="text" color="info" size="small"onClick={() => handleNavChange("emprestimos")}>
-                Empréstimos
-              </Button>
-              <Button variant="text" color="info" size="small" onClick={() => handleNavChange("dados")}>
-                Meus Dados
-              </Button>
-              <Button variant="text" color="info" size="small" onClick={logout}>
-                Sair
-              </Button>
-              <ColorModeIconDropdown />
+            {usuario ?
+              <Box sx={{ display: { xs: 'none', md: 'flex', gap: 3 } }}>
 
-            </Box>
+                <Button variant="text" color="info" size="small" onClick={() => handleNavChange("acervo")}>
+                  Acervo
+                </Button>
+                <Button variant="text" color="info" size="small" onClick={() => handleNavChange("emprestimos")}>
+                  Empréstimos
+                </Button>
+                <Button variant="text" color="info" size="small" onClick={() => handleNavChange("dados")}>
+                  Meus Dados
+                </Button>
+                <Button variant="text" color="info" size="small" onClick={logout}>
+                  Sair
+                </Button>
+                <ColorModeIconDropdown />
+
+              </Box>
+              : null}
+
+            {funcionario ?
+              <Box sx={{ display: { xs: 'none', md: 'flex', gap: 3 } }}>
+
+                <Button variant="text" color="info" size="small" onClick={() => handleNavChange("acervo")}>
+                  Acervo
+                </Button>
+                <Button variant="text" color="info" size="small" onClick={() => handleNavChange("emprestimos")}>
+                  Empréstimos
+                </Button>
+                <Button variant="text" color="info" size="small" onClick={() => handleNavChange("livros")}>
+                  Livros
+                </Button>
+                <Button variant="text" color="info" size="small" onClick={() => handleNavChange("dados")}>
+                  Meus Dados
+                </Button>
+                <Button variant="text" color="info" size="small" onClick={logout}>
+                  Sair
+                </Button>
+                <ColorModeIconDropdown />
+
+              </Box>
+              : null}
           </Box>
 
           <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 1 }}>
@@ -144,10 +172,24 @@ export default function AppAppBarOut( {handleNavChange}) {
                 </Box>
 
 
-                <MenuItem onClick={() => handleNavChange("acervo")}>Acervo</MenuItem>
-                <MenuItem onClick={() => handleNavChange("emprestimos")}>Empréstimos</MenuItem>
-                <MenuItem onClick={() => handleNavChange("dados")}>Meus Dados</MenuItem>
-                <MenuItem onClick={logout}>Sair</MenuItem>
+                {usuario ? (
+                  <>
+                    <MenuItem onClick={() => handleNavChange("acervo")}>Acervo</MenuItem>
+                    <MenuItem onClick={() => handleNavChange("emprestimos")}>Empréstimos</MenuItem>
+                    <MenuItem onClick={() => handleNavChange("dados")}>Meus Dados</MenuItem>
+                    <MenuItem onClick={logout}>Sair</MenuItem>
+                  </>
+                ) : null}
+
+                {funcionario ? (
+                  <>
+                    <MenuItem onClick={() => handleNavChange("acervo")}>Acervo</MenuItem>
+                    <MenuItem onClick={() => handleNavChange("emprestimos")}>Empréstimos</MenuItem>
+                    <MenuItem onClick={() => handleNavChange("livros")}>Livros</MenuItem>
+                    <MenuItem onClick={() => handleNavChange("dados")}>Meus Dados</MenuItem>
+                    <MenuItem onClick={logout}>Sair</MenuItem>
+                  </>
+                ) : null}
 
 
               </Box>

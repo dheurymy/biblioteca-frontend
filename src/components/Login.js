@@ -174,6 +174,7 @@ const Login = (props) => {
         navigate('/home')
       } else {
         alert(data.mensagem || data.message || "Erro ao logar.");
+        setBotao(false);
       }
     } catch (error) {
       console.error("Erro na verificação ou login:", error);

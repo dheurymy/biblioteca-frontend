@@ -237,11 +237,9 @@ const Cadastro = (props) => {
     }
   };
   return (
-    <AppTheme {...props}>
-      <CssBaseline enableColorScheme />
-      <AppAppBarOut />
-      <SignUpContainer direction="column" justifyContent="space-between" marginTop={10}>
-        <Card variant="outlined">
+    
+      
+        <Card variant="outlined" sx={{borderColor: 'Highlight'}}>
 
           <Typography
             component="h3"
@@ -250,18 +248,7 @@ const Cadastro = (props) => {
           >
             Cadastro de Livros
           </Typography>
-          <Typography
-            component="p"
-            variant="p"
-            sx={{
-              width: '100%',
-              fontSize: 'clamp(1rem, 6vw, 1rem)',
-              color: '#00caf8',
-            }}
-          >
-            {nome ? `Olá, ${nome}!` : 'Olá, Usuário!'}
-
-          </Typography>
+          
           <Box
             component="form"
             onSubmit={handleSubmit}
@@ -477,8 +464,8 @@ const Cadastro = (props) => {
           </Box>
 
         </Card>
-      </SignUpContainer>
-    </AppTheme>
+      
+   
   )
 };
 

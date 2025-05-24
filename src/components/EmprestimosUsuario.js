@@ -62,8 +62,9 @@ const EmprestimosUsuario = (props) => {
 
 
 
-  const emprestimosFiltrados = emprestimos.filter(emprestimo => emprestimo.usuarioId._id === usuario._id);
-  console.log(emprestimosFiltrados);
+ const emprestimosFiltrados = emprestimos.sort((a, b) => new Date(b.dataEmprestimo) - new Date(a.dataEmprestimo));
+
+console.log(emprestimosFiltrados);
 
 
 
@@ -92,7 +93,7 @@ const EmprestimosUsuario = (props) => {
         <Box
           sx={{
             width: { sm: '100%', md: '100%' },
-            textAlign: { sm: 'left', md: 'center' },
+            textAlign: { sm: 'center', md: 'center' },
           }}
         >
           <Typography
@@ -110,14 +111,14 @@ const EmprestimosUsuario = (props) => {
 
 
         <Grid container spacing={2}>
-          {emprestimos.length === 0 && texto === false && (
+          {emprestimosFiltrados.length === 0 && texto === false && (
             <Typography variant="body1" sx={{ color: 'text.secondary' }}>
               Nenhum empréstimo para este usuário.
             </Typography>
           )}
           {texto ? "Buscando empréstimos..." : ""}
 
-          {emprestimos.map((emprestimo, index) => (
+          {emprestimosFiltrados.map((emprestimo, index) => (
             <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index} sx={{ display: 'flex', minWidth: '300px' }}>
               <Card
                 variant="outlined"
@@ -126,7 +127,16 @@ const EmprestimosUsuario = (props) => {
                   flexDirection: 'column',
                   justifyContent: 'space-between',
                   flexGrow: 1,
-                  borderColor: "Highlight"
+                  color: (!emprestimo.dataDevolucaoReal
+                      ? (new Date(emprestimo.dataDevolucaoPrevista) >= new Date() ? "OK" : "Atrasado")
+                      : "Finalizado") === "OK"? "green" : (!emprestimo.dataDevolucaoReal
+                      ? (new Date(emprestimo.dataDevolucaoPrevista) >= new Date() ? "OK" : "Atrasado")
+                      : "Finalizado") === "Finalizado" ? "gray" : "red",
+                      borderColor: (!emprestimo.dataDevolucaoReal
+                      ? (new Date(emprestimo.dataDevolucaoPrevista) >= new Date() ? "OK" : "Atrasado")
+                      : "Finalizado") === "OK"? "green" : (!emprestimo.dataDevolucaoReal
+                      ? (new Date(emprestimo.dataDevolucaoPrevista) >= new Date() ? "OK" : "Atrasado")
+                      : "Finalizado") === "Finalizado" ? "gray" : "red"
                 }}
               >
                 <CardHeader
