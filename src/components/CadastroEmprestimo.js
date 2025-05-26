@@ -117,48 +117,68 @@ const CadastroEmprestimo = (props) => {
 
     const { cpfUsuario, cpfFuncionario, isbnLivro, dataEmprestimo, dataDevolucaoPrevista } = formData;
 
-
-
-
     try {
-      const response = await fetch('https://biblioteca-backend-kappa.vercel.app/emprestimos', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ cpfUsuario, cpfFuncionario, isbnLivro, dataEmprestimo, dataDevolucaoPrevista }),
-      });
-
-      // Tenta converter a resposta para JSON, mas captura erros caso falhe
-      let data;
-      try {
-        data = await response.json();
-      } catch {
-        data = { message: "Erro inesperado do servidor." };
-      }
-
-      if (response.ok) {
-        alert("Emprestimo registrado com sucesso!");
-        setFormData({
-          cpfUsuario: "",
-          cpfFuncionario: "",
-          isbnLivro: "",
-          dataEmprestimo: "",
-          dataDevolucaoPrevista: "",
-          tipoUsuario: ""
+        // Verificar se o usuário tem empréstimos pendentes
+        const responseVerificacao = await fetch(`https://biblioteca-backend-kappa.vercel.app/emprestimos-pendentes/${cpfUsuario}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
         });
-        setBotao(false);
-        
-      } else {
-        alert(data.mensagem || data.message || "Erro ao cadastrar empréstimo.");
-        setBotao(false);
-      }
-    } catch (error) {
-      console.error("Erro ao cadastrar emprestimo:", error);
-      alert("Erro ao cadastrar emprestimo. Tente novamente mais tarde.");
-    }
 
-  };
+        let dataVerificacao;
+        try {
+            dataVerificacao = await responseVerificacao.json();
+        } catch {
+            dataVerificacao = { message: "Erro inesperado do servidor." };
+        }
+
+        if (!responseVerificacao.ok) {
+            alert(dataVerificacao.mensagem || dataVerificacao.message || "Erro ao verificar empréstimos pendentes.");
+            return setBotao(false);
+        }
+
+        if (dataVerificacao.length) {
+            alert("Usuário possui empréstimos pendentes. Não é possível registrar um novo empréstimo.");
+            return setBotao(false);
+        }
+
+        // Caso não haja empréstimos pendentes, registrar o novo empréstimo
+        const responseEmprestimo = await fetch('https://biblioteca-backend-kappa.vercel.app/emprestimos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ cpfUsuario, cpfFuncionario, isbnLivro, dataEmprestimo, dataDevolucaoPrevista }),
+        });
+
+        let dataEmprestimo;
+        try {
+            dataEmprestimo = await responseEmprestimo.json();
+        } catch {
+            dataEmprestimo = { message: "Erro inesperado do servidor." };
+        }
+
+        if (responseEmprestimo.ok) {
+            alert("Empréstimo registrado com sucesso!");
+            setFormData({
+                cpfUsuario: "",
+                cpfFuncionario: "",
+                isbnLivro: "",
+                dataEmprestimo: "",
+                dataDevolucaoPrevista: "",
+                tipoUsuario: ""
+            });
+        } else {
+            alert(dataEmprestimo.mensagem || dataEmprestimo.message || "Erro ao cadastrar empréstimo.");
+        }
+    } catch (error) {
+        console.error("Erro ao processar empréstimo:", error);
+        alert("Erro ao processar empréstimo. Tente novamente mais tarde.");
+    } finally {
+        setBotao(false);
+    }
+};
   return (
     
       
