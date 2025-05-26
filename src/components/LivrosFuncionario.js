@@ -22,6 +22,7 @@ import Grid from '@mui/material/Grid';
 import CadastroLivro from './CadastroLivro';
 import FinalizaEmprestimo from './FinalizaEmprestimo';
 import LivrosRanking from "./LivrosRanking";
+import AlterarLivro from './AlterarLivro';
 
 
 const LivrosFuncionario = (props) => {
@@ -57,7 +58,7 @@ const LivrosFuncionario = (props) => {
                         gutterBottom
                         sx={{ color: 'text.primary' }}
                     >
-                        Empréstimos
+                        Livros
                     </Typography>
                     <Typography variant="body1" sx={{ color: 'text.secondary' }}>
                         Veja abaixo o catálogo de itens em livros.
@@ -119,6 +120,7 @@ const LivrosFuncionario = (props) => {
                     >
                         {navegacao === "cadastro" && <CadastroLivro />}
                         {navegacao === "finaliza" && <FinalizaEmprestimo />}
+                        {navegacao === "alterar" && <AlterarLivro />}
                         {navegacao === "ranking" && <LivrosRanking />}
 
                     </Box>
